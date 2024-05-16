@@ -1,0 +1,27 @@
+{
+  "name": "@juwel-development/react-observable-tools",
+  "version": "0.0.1",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/es/src/index.d.ts",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint . --ext .ts,.tsx",
+    "start": "rollup -c -w"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "rxjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/react": "18.0.0",
+    "react": "18.0.0",
+    "rollup": "^4.17.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "rxjs": "^7.8.1",
+    "typescript": "^5.0.0"
+  }
+}

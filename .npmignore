@@ -1,0 +1,7 @@
+/.idea
+/src
+/node_modules
+.gitignore
+rollup.config.mjs
+tsconfig.json
+yarn.lock

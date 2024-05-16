@@ -45,5 +45,5 @@ const CounterValue: FunctionComponent<IProps> = ({ counter$ }) => {
     const currentNumber = useSubscription(counter$)
 
     return <div>{currentNumber}</div>;
-}
+};
 ```

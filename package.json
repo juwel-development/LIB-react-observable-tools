@@ -29,5 +29,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/juwel-development/LIB-react-observable-tools.git"
-  }
+  },
+  "keywords": [
+    "react",
+    "rxjs",
+    "observable",
+    "utility",
+    "reactive"
+  ]
 }

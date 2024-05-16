@@ -1,4 +1,4 @@
-name: publish
+name: release
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: publish
-        run: yarn run semantic-release
+        run: yarn run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

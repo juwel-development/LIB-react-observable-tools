@@ -10,7 +10,7 @@
     "build": "rollup -c",
     "lint": "eslint . --ext .ts,.tsx",
     "start": "rollup -c -w",
-    "semantic-release": "semantic-release"
+    "release": "semantic-release"
   },
   "peerDependencies": {
     "react": "^18.0.0",

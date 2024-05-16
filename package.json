@@ -28,6 +28,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/juwel-development/LIB-react-observable-tools.git"
+    "url": "git+https://github.com/juwel-development/LIB-react-observable-tools.git"
   }
 }

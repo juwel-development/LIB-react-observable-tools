@@ -19,3 +19,5 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
+      - name: publish
+        run: yarn run semantic-release

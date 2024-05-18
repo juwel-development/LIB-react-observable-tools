@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Subject } from 'rxjs';
+import { useEffect, useRef } from "react";
+import { Subject } from "rxjs";
 
 /**
  * calls the handler function when the returned subject is triggered
@@ -8,14 +8,17 @@ import { Subject } from 'rxjs';
  * @param {Array<unknown>} dependencies - dependencies of your handler function
  * @returns {Subject} subject - subject that triggers the handler function
  */
-export const useAction = (handler: () => void, dependencies: unknown[] = []) => {
-    const subjectRef = useRef(new Subject<void>());
+export const useAction = <T = void>(
+  handler: (param: T) => void,
+  dependencies: unknown[] = [],
+): Subject<T> => {
+  const subjectRef = useRef(new Subject<T>());
 
-    useEffect(() => {
-        const subscription = subjectRef.current.subscribe(handler);
+  useEffect(() => {
+    const subscription = subjectRef.current.subscribe(handler);
 
-        return () => subscription.unsubscribe();
-    }, dependencies);
+    return () => subscription.unsubscribe();
+  }, dependencies);
 
-    return subjectRef.current;
+  return subjectRef.current;
 };

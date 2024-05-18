@@ -8,12 +8,12 @@ import type { Observable } from 'rxjs';
  * @returns The value emitted by the observable.
  */
 export const useSubscription = <T>(observable: Observable<T>) => {
-    const [value, setValue] = useState<T | undefined>();
+  const [value, setValue] = useState<T | undefined>();
 
-    useEffect(() => {
-        const subscription = observable.subscribe(setValue);
-        return () => subscription.unsubscribe();
-    }, []);
+  useEffect(() => {
+    const subscription = observable.subscribe(setValue);
+    return () => subscription.unsubscribe();
+  }, []);
 
-    return value;
+  return value;
 };

@@ -17,6 +17,6 @@ export default {
 
     },
   ],
-  external: ['react', 'rxjs'],
+  external: ['react', 'rxjs', 'tsyringe', 'reflect-metadata'],
   plugins: [typescript({clean: true, tsconfigOverride: {compilerOptions: {declaration: true}}})]
 }

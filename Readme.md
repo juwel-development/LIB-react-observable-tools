@@ -8,6 +8,9 @@ This package provides tools to integrate [rxjs](https://rxjs.dev) with [react](h
 npm install @juwel-development/react-observable-tools
 ```
 
+## Requirements
+This package requires `react` and `rxjs` as peer dependencies. As we also rely on dependency injection, you need to have `tsyringe` installed.
+
 ## Use cases
 
 ### Trigger side effects when the user interacts with your application

@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json.schemastore.org/eslintrc",
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "build/**",
+    "dist/**"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "src/**/*.{ts,tsx}"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/recommended-type-checked",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ],
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ]
+      },
+      "rules": {
+        "@typescript-eslint/no-unsafe-argument": "error",
+        "@typescript-eslint/no-unsafe-assignment": "error",
+        "@typescript-eslint/no-unsafe-return": "error",
+        "@typescript-eslint/no-unsafe-member-access": "error",
+        "@typescript-eslint/no-unsafe-call": "error",
+        "@typescript-eslint/no-misused-promises": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/ban-ts-comment": "error",
+        "@typescript-eslint/no-unsafe-enum-comparison": "error",
+        "@typescript-eslint/require-await": "error",
+        "@typescript-eslint/unbound-method": "error",
+        "@typescript-eslint/no-redundant-type-constituents": "error",
+        "@typescript-eslint/restrict-template-expressions": "error"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "simple-import-sort",
+    "react-hooks",
+    "no-only-tests"
+  ],
+  "rules": {
+    "object-shorthand": "error",
+    "prefer-const": "error",
+    "prefer-object-spread": "error",
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": [
+          "tw"
+        ]
+      }
+    ],
+    "react/jsx-curly-brace-presence": [
+      "error",
+      "never"
+    ],
+    "react/react-in-jsx-scope": "off",
+    "no-console": 2,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "local",
+        "args": "after-used",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "react/prop-types": 0,
+    "react/display-name": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "printWidth": 120
+      }
+    ],
+    "simple-import-sort/imports": [
+      "error"
+    ],
+    "import/newline-after-import": 2,
+    "no-only-tests/no-only-tests": "error"
+  }
+}

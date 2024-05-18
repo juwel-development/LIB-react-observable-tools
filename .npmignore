@@ -6,3 +6,5 @@
 rollup.config.mjs
 tsconfig.json
 yarn.lock
+/.turbo
+.releaserc.json

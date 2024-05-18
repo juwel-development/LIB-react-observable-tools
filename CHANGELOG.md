@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v1.1.1...v1.2.0) (2024-05-18)
+
+
+### Features
+
+* Add possibility to use stream values when using `useAction` ([7c3ee28](https://github.com/juwel-development/LIB-react-observable-tools/commit/7c3ee28f1176f12460e96feb0969aaa0c6babecc))
+
+
+### Reverts
+
+* Revert "chore(release): set `package.json` version to 1.1.1 [skip ci]" ([b9f05fe](https://github.com/juwel-development/LIB-react-observable-tools/commit/b9f05fe5d436693a3c098d10f5fd2089b2f8f533))
+
 ## [1.1.1](https://github.com/juwel-development/LIB-react-observable-tools/compare/v1.1.0...v1.1.1) (2024-05-18)
 
 ### Bug Fixes

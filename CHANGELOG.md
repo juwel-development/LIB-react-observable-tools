@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v1.2.0...v2.0.0) (2024-05-19)
+
+
+### Features
+
+* **event:** Introduce global event stream ([4e03eed](https://github.com/juwel-development/LIB-react-observable-tools/commit/4e03eed45e1c9df436d00c000740b47b11ce1523))
+* Make IEventHandler generic ([addef39](https://github.com/juwel-development/LIB-react-observable-tools/commit/addef3950e152dc4b0ed9ec0fc0599801bf4e279))
+
+
+### BREAKING CHANGES
+
+* **event:** We are committed for dependency injection in the client. That's why we provide our GlobalEventStream as an injectable. Therefor tsyringe and reflect-metadata is now required as peer dependency.
+
 # [1.2.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v1.1.1...v1.2.0) (2024-05-18)
 
 

@@ -1,10 +1,11 @@
-/.idea
-/.github
-/src
-/node_modules
+.eslintrc
 .gitignore
+.releaserc.json
+/.github
+/.idea
+/.turbo
+/node_modules
+/src
 rollup.config.mjs
 tsconfig.json
 yarn.lock
-/.turbo
-.releaserc.json

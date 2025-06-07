@@ -1,6 +1,6 @@
 {
   "name": "@juwel-development/react-observable-tools",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/src/index.d.ts",
@@ -13,7 +13,7 @@
     "release": "semantic-release"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
+    "react": "^18.0.0 || ^19.0.0",
     "rxjs": "^7.0.0",
     "tsyringe": "^4.0.0",
     "reflect-metadata": "^0.2.2"
@@ -35,10 +35,10 @@
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "prettier": "^3.2.5",
     "react": "^18.0.0",
-    "rollup": "^4.17.2",
+    "rollup": "^4.42.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "rxjs": "^7.8.1",
-    "semantic-release": "^23.1.1",
+    "semantic-release": "^24.2.1",
     "typescript": "^5.0.0",
     "tsyringe": "^4.0.0",
     "reflect-metadata": "^0.2.2"

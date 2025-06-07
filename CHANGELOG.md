@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v2.0.0...v2.1.0) (2025-06-07)
+
+
+### Features
+
+* **update:** support for react 19 ([a283a93](https://github.com/juwel-development/LIB-react-observable-tools/commit/a283a939e7327b6b07e0ced2284c69582d30e35e))
+
 # [2.0.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v1.2.0...v2.0.0) (2024-05-19)
 
 

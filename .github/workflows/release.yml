@@ -1,13 +1,99 @@
 name: release
 
 on:
-  workflow_dispatch:
+  push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
+  # What *would* be released, computed and reported without publishing anything. This runs
+  # ungated so the version is on screen before anyone is asked to approve it: a breaking change
+  # below 1.0.0 goes straight to 1.0.0, which is easy to intend and easier to ship by accident.
+  preview:
+    name: preview
+    runs-on: ubuntu-latest
+    permissions:
+      # Write, despite this job publishing nothing: semantic-release verifies it *could* push
+      # before it will report anything, even under --dry-run, and fails EGITNOPERMISSION with a
+      # read-only token. The dry run stops before prepare/publish, so no tag or commit is pushed.
+      # The gate that matters is the environment on the release job below, not this permission.
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # semantic-release reads the full tag and commit history to work out what the
+          # next version is; a shallow clone makes it think every release is the first.
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Compute the next version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -o pipefail
+          # Only the two plugins that decide the version. The full plugin list would drag in
+          # @semantic-release/npm, whose verifyConditions authenticates against the registry even
+          # under --dry-run — so the preview would need the publish token, which is the one thing
+          # an ungated job should not hold. These two need no credentials.
+          npx semantic-release --dry-run \
+            --plugins @semantic-release/commit-analyzer,@semantic-release/release-notes-generator \
+            2>&1 | tee dry-run.log
+
+          # Strip ANSI escapes: semantic-release colours its output, and the codes sit right up
+          # against the version number.
+          sed -e 's/\x1b\[[0-9;]*m//g' dry-run.log > clean.log
+
+          # The version pattern is bounded rather than a `[^ ]*` catch-all so nothing trailing is
+          # taken for part of the version. `|| true` because "no release" is the case where grep
+          # finds nothing, and Actions runs this with bash -e: an unmatched grep would otherwise
+          # abort the step before it could report exactly that.
+          version="$(grep -oE 'The next release version is [0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?' \
+            clean.log | tail -1 | sed 's/The next release version is //' || true)"
+
+          {
+            echo "## Release preview"
+            if [ -n "$version" ]; then
+              echo "Approving the **release** job publishes \`$version\`."
+              if grep -q 'BREAKING CHANGE' clean.log; then
+                echo ""
+                echo "> :warning: This release contains a **breaking change**."
+              fi
+            else
+              echo "No relevant changes since the last tag — approving would publish nothing."
+            fi
+            echo ""
+            echo "<details><summary>semantic-release dry run</summary>"
+            echo ""
+            echo '```'
+            cat clean.log
+            echo '```'
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
   release:
-    runs-on: "ubuntu-latest"
+    name: release
+    needs: preview
+    runs-on: ubuntu-latest
+    # The approval gate. This environment carries a required reviewer, so the job parks as
+    # "Waiting" until a human approves it — nothing is published before that. The environment
+    # MUST exist with its protection rule: a workflow naming an absent environment gets one
+    # created on the fly with no rules at all, which would publish unattended.
+    environment: release
+    # Serialised here rather than at workflow level on purpose. A run parked awaiting approval
+    # holds its concurrency group for as long as it waits, and a workflow-level group would keep
+    # the *next* merge's preview from running — leaving the newer change with no version report.
+    concurrency:
+      group: release
+      cancel-in-progress: false
     permissions:
       contents: write
       issues: write
@@ -16,21 +102,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules-
+          node-version: '22'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
+      # No test leg: this package has no test suite. Add `npm run test` here alongside
+      # the matrix entry in merge.yml when one lands.
+      - name: Verify
+        run: |
+          npm run lint
+          npm run typecheck
       - name: Build
         run: npm run build
-      - name: publish
-        run: npm run release
+      - name: Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

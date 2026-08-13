@@ -18,9 +18,18 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "sourceMap": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    // Pinned rather than inferred. TypeScript otherwise derives rootDir from the set of
+    // input files, so narrowing `include` to src/ below would move the emitted
+    // declarations from dist/es/src/index.d.ts up to dist/es/index.d.ts — and the `types`
+    // field in package.json points at the former.
+    "rootDir": "."
   },
   "globals": {
     "ENV": "string"
-  }
+  },
+  // Scoped to the library sources. Without this, `tsc --noEmit` also pulls in
+  // rollup.config.mjs (allowJs) and with it rollup's own .d.ts files, which need a
+  // newer `lib` than this package builds against.
+  "include": ["src"]
 }

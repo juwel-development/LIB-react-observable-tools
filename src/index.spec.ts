@@ -10,7 +10,7 @@ describe('package entry points', () => {
     expect(hooks.useSubscription).toBeTypeOf('function');
   });
 
-  it('serves the event bus from ./Event', () => {
+  it('serves the event bus from ./event', () => {
     expect(event.EventHandler).toBeTypeOf('function');
     expect(event.GlobalEvent$).toBeDefined();
     expect(event.GlobalEventStreamToken).toBeTypeOf('symbol');

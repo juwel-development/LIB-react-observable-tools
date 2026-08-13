@@ -5,6 +5,7 @@ export default {
     index: 'src/index.ts',
     hooks: 'src/hooks/index.ts',
     event: 'src/Event/index.ts',
+    operator: 'src/Operator/index.ts',
   },
   output: [
     {

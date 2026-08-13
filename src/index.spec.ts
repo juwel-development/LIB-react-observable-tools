@@ -1,4 +1,5 @@
 import * as event from 'Event/index';
+import * as operator from 'Operator/index';
 import * as hooks from 'hooks/index';
 import { describe, expect, it } from 'vitest';
 
@@ -16,11 +17,16 @@ describe('package entry points', () => {
     expect(event.GlobalEventStreamToken).toBeTypeOf('symbol');
   });
 
-  it('re-exports both halves from the root, so existing imports keep working unchanged', () => {
+  it('serves the operators from ./operator, so a consumer does not need reflect-metadata or tsyringe just to pipe a stream', () => {
+    expect(operator.shareWhileSubscribers).toBeTypeOf('function');
+  });
+
+  it('re-exports all three from the root, so existing imports keep working unchanged', () => {
     expect(root.useAction).toBe(hooks.useAction);
     expect(root.useSubscription).toBe(hooks.useSubscription);
     expect(root.EventHandler).toBe(event.EventHandler);
     expect(root.GlobalEvent$).toBe(event.GlobalEvent$);
     expect(root.GlobalEventStreamToken).toBe(event.GlobalEventStreamToken);
+    expect(root.shareWhileSubscribers).toBe(operator.shareWhileSubscribers);
   });
 });

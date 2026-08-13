@@ -15,13 +15,15 @@ This package requires `react` and `rxjs` as peer dependencies. The global event 
 
 ## Entry points
 
-The package is split so the DI-free hooks can be used without the event bus:
+The package is split so the DI-free parts can be used without pulling in the event bus:
 
 - `@juwel-development/react-observable-tools/hooks` — `useAction`, `useSubscription`. Needs `react` and `rxjs` only; pulls in neither
   `tsyringe` nor `reflect-metadata`.
+- `@juwel-development/react-observable-tools/operator` — `shareWhileSubscribers`. Needs `rxjs` only; pulls in neither `tsyringe` nor
+  `reflect-metadata`.
 - `@juwel-development/react-observable-tools/event` — `GlobalEvent$`, `GlobalEventStreamToken`, `EventHandler`, `IEventHandler`, `TEvent`,
   `IEvent`. Needs `tsyringe` and `reflect-metadata`.
-- `@juwel-development/react-observable-tools` — the root, re-exports both halves (used in the examples below).
+- `@juwel-development/react-observable-tools` — the root, re-exports all of the above (used in the examples below).
 
 ## Use cases
 
@@ -115,7 +117,7 @@ connection. By default an errored or completed source stays that way for later s
 silently re-running; pass `resetOnError` or `resetOnComplete` to opt back into RxJS's reset-and-retry.
 
 ```typescript
-import { shareWhileSubscribers } from '@juwel-development/react-observable-tools';
+import { shareWhileSubscribers } from '@juwel-development/react-observable-tools/operator';
 
 const projection$ = source$.pipe(shareWhileSubscribers());
 ```

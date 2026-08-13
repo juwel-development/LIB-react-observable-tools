@@ -19,6 +19,11 @@
       "types": "./dist/es/src/Event/index.d.ts",
       "import": "./dist/es/event.js",
       "require": "./dist/cjs/event.js"
+    },
+    "./operator": {
+      "types": "./dist/es/src/Operator/index.d.ts",
+      "import": "./dist/es/operator.js",
+      "require": "./dist/cjs/operator.js"
     }
   },
   "private": false,

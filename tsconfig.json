@@ -12,6 +12,11 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    // The build transpiles each file independently through esbuild rather than the
+    // TS compiler, so this makes tsc flag anything that depends on whole-program
+    // type info to compile correctly (e.g. bare `export { SomeInterface }`, which
+    // needs `export type`) instead of only failing at bundle time.
+    "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -19,7 +24,9 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "skipLibCheck": true,
-    "baseUrl": "./src",
+    // baseUrl was removed as of TypeScript 6.0; this reproduces its bare-specifier
+    // resolution (e.g. `import 'Event/TEvent'`) against ./src.
+    "paths": { "*": ["./src/*"] },
     // Pinned rather than inferred. TypeScript otherwise derives rootDir from the set of
     // input files, so narrowing `include` to src/ below would move the emitted
     // declarations from dist/es/src/index.d.ts up to dist/es/index.d.ts — and the `types`

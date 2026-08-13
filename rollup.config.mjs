@@ -1,4 +1,4 @@
-import typescript from 'rollup-plugin-typescript2'
+import esbuild from 'rollup-plugin-esbuild'
 
 export default {
   input: {
@@ -22,5 +22,9 @@ export default {
     },
   ],
   external: ['react', 'rxjs', 'tsyringe', 'reflect-metadata'],
-  plugins: [typescript({clean: true, tsconfigOverride: {compilerOptions: {declaration: true}}})]
+  // TypeScript 7's Go-native compiler dropped the programmatic compiler API that
+  // rollup-plugin-typescript2 relied on, so transpilation runs through esbuild here
+  // instead (it has its own TS/JSX parser); declarations are emitted separately by
+  // `tsc` itself, which is unaffected since the CLI still works as before.
+  plugins: [esbuild({ tsconfig: 'tsconfig.json', target: 'es6' })]
 }

@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist/es"
+  },
+  // Only the library sources get declarations published; tsconfig.json also includes
+  // vitest.config.mts so it's typechecked, but that file has no consumer-facing types.
+  "include": ["src"]
+}

@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import prettierConfig from 'eslint-config-prettier/flat';
 import importPlugin from 'eslint-plugin-import';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -28,8 +27,8 @@ export default tseslint.config(
       'react/no-unknown-property': ['error', { ignore: ['tw'] }],
       'react/jsx-curly-brace-presence': ['error', 'never'],
       'react/react-in-jsx-scope': 'off',
-      'no-console': 2,
-      '@typescript-eslint/explicit-function-return-type': 0,
+      'no-console': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -42,10 +41,10 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
-      'react/prop-types': 0,
-      'react/display-name': 0,
+      'react/prop-types': 'off',
+      'react/display-name': 'off',
       'simple-import-sort/imports': ['error'],
-      'import/newline-after-import': 2,
+      'import/newline-after-import': 'error',
       'no-only-tests/no-only-tests': 'error',
     },
   },
@@ -66,7 +65,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-call': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-unsafe-enum-comparison': 'error',
@@ -78,7 +76,7 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [prettierConfig, prettierRecommended],
+    extends: [prettierRecommended],
     rules: {
       'prettier/prettier': ['error', { singleQuote: true, printWidth: 120 }],
     },

@@ -121,9 +121,15 @@ jobs:
           npm run typecheck
       - name: Build
         run: npm run build
+      # Publishes via npm trusted publishing (OIDC) — there is no npm token here on purpose.
+      # @semantic-release/npm exchanges the `id-token: write` credential above for a
+      # short-lived registry token, so nothing long-lived is stored. It runs its own bundled
+      # npm rather than the runner's, which is why the Node 22 image's older npm is fine.
+      # This needs a trusted publisher configured on npmjs.com for the package, naming this
+      # repository, the workflow file `release.yml`, and the `release` environment. Without
+      # it the OIDC exchange fails and semantic-release falls back to token auth, which then
+      # errors ENONPMTOKEN rather than publishing something unsigned.
       - name: Release
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

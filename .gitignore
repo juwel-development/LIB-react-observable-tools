@@ -2,3 +2,8 @@ node_modules/
 dist
 
 .turbo/
+
+# Local agent substrate, including sandcastle's git worktrees — those are nested
+# repositories, so committing the directory records a bare gitlink that no clone
+# can resolve. Matches how LIB-design-system ignores it.
+.claude/

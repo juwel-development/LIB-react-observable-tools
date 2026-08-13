@@ -13,9 +13,13 @@
     "build": "rollup -c",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "start": "rollup -c -w",
     "release": "semantic-release",
-    "prepare": "husky"
+    "prepare": "husky",
+    "sandcastle": "tsx .sandcastle/main.ts",
+    "sandcastle:image": "sandcastle docker build-image"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -24,13 +28,17 @@
     "tsyringe": "^4.0.0"
   },
   "devDependencies": {
+    "@ai-hero/sandcastle": "^0.12.0",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@rollup/plugin-typescript": "^11.1.6",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/git": "^11.0.1",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -41,15 +49,20 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "husky": "^9.1.7",
+    "jsdom": "^30.0.1",
     "prettier": "^3.2.5",
     "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "reflect-metadata": "^0.2.2",
     "rollup": "^4.42.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "rxjs": "^7.8.1",
     "semantic-release": "^25.0.9",
+    "tsx": "^4.23.11",
     "tsyringe": "^4.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.10",
+    "zod": "^4.4.3"
   },
   "repository": {
     "type": "git",

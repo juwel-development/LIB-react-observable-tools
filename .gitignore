@@ -2,8 +2,16 @@ node_modules/
 dist
 
 .turbo/
+coverage/
 
 # Local agent substrate, including sandcastle's git worktrees — those are nested
 # repositories, so committing the directory records a bare gitlink that no clone
 # can resolve. Matches how LIB-design-system ignores it.
+#
+# The skills and the standards/tracker docs they read are kept local rather than
+# published with the package. Sandcastle sandboxes are git worktrees and so do not
+# contain ignored files — both trees reach an agent through `copyToWorktree` in
+# `.sandcastle/main.ts` instead. If either is renamed, that list has to move with it.
 .claude/
+.sandcastle/
+docs/agents/

@@ -14,10 +14,11 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "sourceMap": true,
+    "skipLibCheck": true,
     "baseUrl": "./src",
     // Pinned rather than inferred. TypeScript otherwise derives rootDir from the set of
     // input files, so narrowing `include` to src/ below would move the emitted
@@ -25,11 +26,12 @@
     // field in package.json points at the former.
     "rootDir": "."
   },
+  // Scoped to the library sources, plus vitest's own config file so it typechecks too.
+  // Without this, `tsc --noEmit` also walks rollup.config.mjs and, through it and
+  // vitest.config.mts, rollup's and vite's own .d.ts files, which need newer `lib`
+  // settings than this package builds against.
+  "include": ["src", "vitest.config.mts"],
   "globals": {
     "ENV": "string"
-  },
-  // Scoped to the library sources. Without this, `tsc --noEmit` also pulls in
-  // rollup.config.mjs (allowJs) and with it rollup's own .d.ts files, which need a
-  // newer `lib` than this package builds against.
-  "include": ["src"]
+  }
 }

@@ -21,16 +21,16 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # semantic-release reads the full tag and commit history to work out what the
           # next version is; a shallow clone makes it think every release is the first.
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '26'
           cache: npm
       - name: Install dependencies
         run: npm ci
@@ -101,14 +101,14 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '26'
           cache: npm
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies

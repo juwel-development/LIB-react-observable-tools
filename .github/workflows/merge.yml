@@ -19,11 +19,11 @@ jobs:
         check: [lint, typecheck, build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '26'
           cache: npm
       - name: Install dependencies
         run: npm ci
@@ -44,15 +44,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # semantic-release derives the version from the commit messages, so a
           # non-conventional message on main would silently produce no release.
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '26'
           cache: npm
       - name: Install dependencies
         run: npm ci

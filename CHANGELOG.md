@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/juwel-development/LIB-react-observable-tools/compare/v2.2.0...v2.2.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **operator:** publish shareWhileSubscribers from a separate entry point ([26b6957](https://github.com/juwel-development/LIB-react-observable-tools/commit/26b6957fe80614dbc25823cc707833286990a467))
+
 # [2.2.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v2.1.0...v2.2.0) (2026-08-13)
 
 

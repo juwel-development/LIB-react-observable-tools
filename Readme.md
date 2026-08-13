@@ -10,8 +10,18 @@ npm install @juwel-development/react-observable-tools
 
 ## Requirements
 
-This package requires `react` and `rxjs` as peer dependencies. As we also rely on dependency injection, you need to have `tsyringe`
-installed.
+This package requires `react` and `rxjs` as peer dependencies. The global event stream additionally relies on dependency injection, so
+`tsyringe` and `reflect-metadata` are needed for that half — they are **optional** peers.
+
+## Entry points
+
+The package is split so the DI-free hooks can be used without the event bus:
+
+- `@juwel-development/react-observable-tools/hooks` — `useAction`, `useSubscription`. Needs `react` and `rxjs` only; pulls in neither
+  `tsyringe` nor `reflect-metadata`.
+- `@juwel-development/react-observable-tools/event` — `GlobalEvent$`, `GlobalEventStreamToken`, `EventHandler`, `IEventHandler`, `TEvent`,
+  `IEvent`. Needs `tsyringe` and `reflect-metadata`.
+- `@juwel-development/react-observable-tools` — the root, re-exports both halves (used in the examples below).
 
 ## Use cases
 

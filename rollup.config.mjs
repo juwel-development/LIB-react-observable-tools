@@ -1,20 +1,24 @@
 import typescript from 'rollup-plugin-typescript2'
-import pkg from './package.json' with { type: "json" };
 
 export default {
-  input: 'src/index.ts',
+  input: {
+    index: 'src/index.ts',
+    hooks: 'src/hooks/index.ts',
+    event: 'src/Event/index.ts',
+  },
   output: [
     {
-      file: pkg.main,
+      dir: 'dist/cjs',
       format: 'cjs',
       exports: 'named',
+      entryFileNames: '[name].js',
       sourcemap: true
     },
     {
-      file: pkg.module,
+      dir: 'dist/es',
       format: 'es',
+      entryFileNames: '[name].js',
       sourcemap: true,
-
     },
   ],
   external: ['react', 'rxjs', 'tsyringe', 'reflect-metadata'],

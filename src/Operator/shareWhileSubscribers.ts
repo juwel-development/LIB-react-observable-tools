@@ -3,17 +3,14 @@ import { ReplaySubject, share } from 'rxjs';
 
 /**
  * Multicasts a source and replays its latest value(s) to late subscribers, while tearing the
- * source subscription down once the last subscriber leaves.
+ * source subscription down once the last subscriber leaves so the next subscriber re-subscribes.
  *
- * Compared with `shareReplay`, a subscriber that arrives after an emission still receives the most
- * recent value(s) — but unlike `shareReplay`, the source subscription is dropped when the
- * subscriber count returns to zero, so the next subscriber causes a fresh subscription rather than
- * holding a long-lived source open forever.
- *
- * Once the last subscriber unsubscribes the source is torn down; the next subscriber re-subscribes
- * to it. By default an errored or completed source stays that way for later subscribers — it is not
- * silently re-run — which avoids duplicating a side effect. Pass `resetOnError` or `resetOnComplete`
- * to restore RxJS's own reset-and-retry behaviour for those cases.
+ * Like `shareReplay`, a subscriber that arrives after an emission still receives the most recent
+ * value(s); unlike `shareReplay`, the source is dropped when the subscriber count returns to zero
+ * rather than held open forever. By default an errored or completed source stays that way for later
+ * subscribers — it is not silently re-run — which avoids duplicating a side effect. Pass
+ * `resetOnError` or `resetOnComplete` to restore RxJS's own reset-and-retry behaviour for those
+ * cases.
  *
  * @example
  * // Replay the last three emissions to a late subscriber:

@@ -10,6 +10,7 @@ import type { Observable } from 'rxjs';
 export const useSubscription = <T>(observable: Observable<T>) => {
   const [value, setValue] = useState<T | undefined>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: subscribes once to the observable instance passed in on mount; re-subscribing on identity change is a behavior change outside this lint migration's scope.
   useEffect(() => {
     const subscription = observable.subscribe(setValue);
     return () => subscription.unsubscribe();

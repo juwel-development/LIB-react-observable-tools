@@ -11,7 +11,7 @@ import type { TEvent } from './TEvent';
  * @param eventType
  */
 export function EventHandler<T extends TEvent>(eventType: string | RegExp) {
-  return function (target: { new (...arg: never[]): { handle(event: T): void } }) {
+  return (target: { new (...arg: never[]): { handle(event: T): void } }) => {
     GlobalEvent$.pipe(
       filter((event) => {
         if (typeof eventType === 'string') {

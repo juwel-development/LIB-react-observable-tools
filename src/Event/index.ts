@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-export { TEvent, IEvent } from './TEvent';
-export { IEventHandler } from './IEventHandler';
-export { GlobalEventStreamToken, GlobalEvent$ } from './GlobalEventStream';
 export { EventHandler } from './EventHandlerAnnotation';
+export { GlobalEvent$, GlobalEventStreamToken } from './GlobalEventStream';
+export { IEventHandler } from './IEventHandler';
+export { IEvent, TEvent } from './TEvent';

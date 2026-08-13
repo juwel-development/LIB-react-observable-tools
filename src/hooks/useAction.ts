@@ -15,6 +15,7 @@ export const useAction = <T = void>(handler: (param: T) => void, dependencies: u
     const subscription = subjectRef.current.subscribe(handler);
 
     return () => subscription.unsubscribe();
+    // biome-ignore lint/correctness/useExhaustiveDependencies: dependencies is a caller-supplied array passed through as-is, so Biome can't statically verify it.
   }, dependencies);
 
   return subjectRef.current;

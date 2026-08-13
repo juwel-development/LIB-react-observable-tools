@@ -1,7 +1,9 @@
 .eslintrc
 .gitignore
 .releaserc.json
+commitlint.config.mjs
 /.github
+/.husky
 /.idea
 /.turbo
 /node_modules

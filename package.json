@@ -18,7 +18,7 @@
     "start": "rollup -c -w",
     "release": "semantic-release",
     "prepare": "husky",
-    "sandcastle": "tsx .sandcastle/main.ts",
+    "sandcastle": "sandcastle docker build-image && tsx .sandcastle/main.ts",
     "sandcastle:image": "sandcastle docker build-image"
   },
   "peerDependencies": {

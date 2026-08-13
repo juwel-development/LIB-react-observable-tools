@@ -1,4 +1,4 @@
-.eslintrc
+eslint.config.mjs
 .gitignore
 .releaserc.json
 commitlint.config.mjs

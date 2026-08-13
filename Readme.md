@@ -105,3 +105,17 @@ const CounterValue: FunctionComponent<IProps> = ({ counter$ }) => {
   return <div>{currentNumber}</div>;
 };
 ```
+
+### Share a stream and replay it to late subscribers
+
+`shareWhileSubscribers` multicasts a source and replays its latest value(s) to a subscriber that
+arrives after an emission. Unlike `shareReplay`, it tears the source subscription down once the last
+subscriber leaves, so the next subscriber re-subscribes rather than inheriting a stale, never-closed
+connection. By default an errored or completed source stays that way for later subscribers instead of
+silently re-running; pass `resetOnError` or `resetOnComplete` to opt back into RxJS's reset-and-retry.
+
+```typescript
+import { shareWhileSubscribers } from '@juwel-development/react-observable-tools';
+
+const projection$ = source$.pipe(shareWhileSubscribers());
+```

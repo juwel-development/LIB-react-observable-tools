@@ -4,6 +4,23 @@
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/es/src/index.d.ts",
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/es/src/hooks/index.d.ts",
+      "import": "./dist/es/hooks.js",
+      "require": "./dist/cjs/hooks.js"
+    },
+    "./event": {
+      "types": "./dist/es/src/Event/index.d.ts",
+      "import": "./dist/es/event.js",
+      "require": "./dist/cjs/event.js"
+    }
+  },
   "private": false,
   "license": "MIT",
   "publishConfig": {
@@ -26,6 +43,14 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.0.0",
     "tsyringe": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "reflect-metadata": {
+      "optional": true
+    },
+    "tsyringe": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ai-hero/sandcastle": "^0.12.0",

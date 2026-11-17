@@ -5,10 +5,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    // Scope discovery to this tree's src. Sandcastle checks each agent out into a
-    // git worktree under .sandcastle/worktrees/<branch>/ with its own src/; vitest's
-    // default include walks those, so a worktree mid-TDD (spec ahead of code) would
-    // fail this tree's pre-commit run. A positive include beats a per-worktree exclude.
+    // Scope discovery to this tree's src. A git worktree nested in this checkout (e.g.
+    // under .claude/worktrees/) has its own src/; vitest's default include walks those,
+    // so a worktree mid-TDD (spec ahead of code) would fail this tree's pre-commit run.
+    // A positive include beats a per-worktree exclude.
     include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     coverage: {
       provider: 'v8',

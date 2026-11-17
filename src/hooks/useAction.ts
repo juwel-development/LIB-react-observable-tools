@@ -1,22 +1,27 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
 
 /**
- * calls the handler function when the returned subject is triggered
+ * calls the handler function when the returned subject is triggered. `next()` calls the handler
+ * from the most recent committed render, so no dependency list is needed.
  *
  * @param {Function} handler - handler that is called when the subject is triggered
- * @param {Array<unknown>} dependencies - dependencies of your handler function
- * @returns {Subject} subject - subject that triggers the handler function
+ * @returns {Subject} subject - subject that triggers the handler function, stable for the component's lifetime
  */
-export const useAction = <T = void>(handler: (param: T) => void, dependencies: unknown[] = []): Subject<T> => {
-  const subjectRef = useRef(new Subject<T>());
+export const useAction = <T = void>(handler: (param: T) => void): Subject<T> => {
+  const [subject] = useState(() => new Subject<T>());
+  const handlerRef = useRef(handler);
+
+  // Updated at commit, not during render, so a render React discards never becomes the active handler.
+  useLayoutEffect(() => {
+    handlerRef.current = handler;
+  });
 
   useEffect(() => {
-    const subscription = subjectRef.current.subscribe(handler);
+    const subscription = subject.subscribe((value) => handlerRef.current(value));
 
     return () => subscription.unsubscribe();
-    // biome-ignore lint/correctness/useExhaustiveDependencies: dependencies is a caller-supplied array passed through as-is, so Biome can't statically verify it.
-  }, dependencies);
+  }, [subject]);
 
-  return subjectRef.current;
+  return subject;
 };

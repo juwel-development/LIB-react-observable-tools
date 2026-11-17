@@ -73,7 +73,8 @@ handler somewhere in your application, otherwise it is not discovered and will n
 ### Trigger side effects when the user interacts with your application
 
 You can use the `useAction` hook to trigger side effects when the user interacts. Let's assume the user is clicking on a button, and you
-want to emit this event to some external classes.
+want to emit this event to some external classes. `next()` always calls the handler from the most recent committed render, so the
+handler takes no dependency list and never acts on stale props.
 
 ```tsx
 import { useAction } from '@juwel-development/react-observable-tools';
@@ -82,7 +83,7 @@ const CounterButton: FunctionComponent = () => {
   const dispatch = useDispatcher();
   const onClick$ = useAction(() => {
     dispatch({ type: 'COUNTER_INCREASE_COMMAND' });
-  }, []);
+  });
 
   return <button onClick={() => onClick$.next()}>Increase</button>;
 };

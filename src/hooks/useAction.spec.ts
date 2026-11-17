@@ -1,20 +1,20 @@
 import { act, renderHook } from '@testing-library/react';
 import { StrictMode } from 'react';
+import { Subject } from 'rxjs';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useAction } from './useAction';
 
-const subjectConstructions = vi.hoisted(() => ({ count: 0 }));
-
+// Spies on construction at the RxJS boundary; every instance is a real Subject.
 vi.mock('rxjs', async (importOriginal) => {
   const rxjs = await importOriginal<typeof import('rxjs')>();
-  class CountedSubject<T> extends rxjs.Subject<T> {
-    constructor() {
-      super();
-      subjectConstructions.count++;
-    }
-  }
-  return { ...rxjs, Subject: CountedSubject };
+  return {
+    ...rxjs,
+    // biome-ignore lint/complexity/useArrowFunction: useAction calls `new Subject()`, and an arrow function can't be constructed.
+    Subject: vi.fn(function () {
+      return new rxjs.Subject();
+    }),
+  };
 });
 
 describe('useAction', () => {
@@ -91,14 +91,14 @@ describe('useAction', () => {
   });
 
   it('constructs one subject for the lifetime of the component, not one per render', () => {
-    subjectConstructions.count = 0;
+    vi.mocked(Subject).mockClear();
     const { rerender } = renderHook(() => useAction(() => {}));
 
     rerender();
     rerender();
     rerender();
 
-    expect(subjectConstructions.count).toBe(1);
+    expect(Subject).toHaveBeenCalledTimes(1);
   });
 
   it('rejects a dependency list, because the handler is always the latest one', () => {

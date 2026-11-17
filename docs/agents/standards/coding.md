@@ -72,7 +72,7 @@ Names replace comments.
 | Observable / Subject | `camelCase` or `PascalCase` per its binding, suffixed `$` | `GlobalEvent$`, `onClick$` |
 | DI token | `PascalCase`, suffixed `Token` | `GlobalEventStreamToken` |
 | Global constant | `SCREAMING_SNAKE_CASE` | — |
-| Local constant | `camelCase` | `subjectRef` |
+| Local constant | `camelCase` | `handlerRef` |
 | File | matches its hook, class, interface, or type alias | `useAction.ts`, `IEventHandler.ts` |
 | Test | the module plus `.spec` | `useAction.spec.ts` |
 

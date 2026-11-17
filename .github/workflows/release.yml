@@ -109,9 +109,10 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '26'
-          cache: npm
-          # Since setup-node v7 the generated .npmrc no longer carries a dummy NODE_AUTH_TOKEN.
-          # Nothing here sets one, and none is needed: trusted publishing (OIDC) below never reads it.
+          # No dependency cache in the job that publishes: a poisoned cache would run with the
+          # OIDC and write credentials below. setup-node's v7 publish examples disable it too.
+          package-manager-cache: false
+          # Sets the registry only. No NODE_AUTH_TOKEN is needed: auth is OIDC (see Release).
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
@@ -126,7 +127,7 @@ jobs:
       # Publishes via npm trusted publishing (OIDC) — there is no npm token here on purpose.
       # @semantic-release/npm exchanges the `id-token: write` credential above for a
       # short-lived registry token, so nothing long-lived is stored. It runs its own bundled
-      # npm rather than the runner's, which is why the Node 22 image's older npm is fine.
+      # npm rather than the runner's, so the runner's npm version does not matter.
       # This needs a trusted publisher configured on npmjs.com for the package, naming this
       # repository, the workflow file `release.yml`, and the `release` environment. Without
       # it the OIDC exchange fails and semantic-release falls back to token auth, which then

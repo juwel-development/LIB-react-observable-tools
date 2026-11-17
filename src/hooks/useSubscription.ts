@@ -1,12 +1,7 @@
 import { useMemo, useSyncExternalStore } from 'react';
 import type { Observable } from 'rxjs';
 
-interface IObservableStore<T> {
-  subscribe: (onStoreChange: () => void) => () => void;
-  getSnapshot: () => T | undefined;
-}
-
-const createObservableStore = <T>(observable: Observable<T>): IObservableStore<T> => {
+const createObservableStore = <T>(observable: Observable<T>) => {
   let value: T | undefined;
 
   // Read the value the observable emits synchronously on subscribe (a ReplaySubject, a BehaviorSubject),
@@ -19,14 +14,14 @@ const createObservableStore = <T>(observable: Observable<T>): IObservableStore<T
     .unsubscribe();
 
   return {
-    subscribe: (onStoreChange) => {
+    subscribe: (onStoreChange: () => void) => {
       const subscription = observable.subscribe((next) => {
         value = next;
         onStoreChange();
       });
       return () => subscription.unsubscribe();
     },
-    getSnapshot: () => value,
+    getSnapshot: (): T | undefined => value,
   };
 };
 

@@ -1,9 +1,25 @@
 import { act, renderHook } from '@testing-library/react';
-import { BehaviorSubject, ReplaySubject, Subject, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import type { Observable } from 'rxjs';
+import { BehaviorSubject, map, ReplaySubject, Subject, timer } from 'rxjs';
 import { describe, expect, it, vi } from 'vitest';
 
 import { useSubscription } from './useSubscription';
+
+const renderRecordingHook = <T>(observable$: Observable<T>) => {
+  const renders: (T | undefined)[] = [];
+  const rendered = renderHook(() => {
+    const value = useSubscription(observable$);
+    renders.push(value);
+    return value;
+  });
+
+  return { ...rendered, renders };
+};
+
+const renderWithObservable = (observable$: Observable<string>) =>
+  renderHook(({ observable }) => useSubscription(observable), {
+    initialProps: { observable: observable$ },
+  });
 
 describe('useSubscription', () => {
   it('returns undefined before the observable has emitted', () => {
@@ -34,32 +50,28 @@ describe('useSubscription', () => {
     expect(subject$.observed).toBe(false);
   });
 
-  it('returns the value a ReplaySubject replays on the first render', () => {
+  it('returns the value a ReplaySubject replays on the first render, so no empty frame renders before it', () => {
     const subject$ = new ReplaySubject<number>(1);
     subject$.next(1);
-    const renders: (number | undefined)[] = [];
 
-    renderHook(() => {
-      const value = useSubscription(subject$);
-      renders.push(value);
-      return value;
-    });
+    const { renders } = renderRecordingHook(subject$);
 
     expect(renders[0]).toBe(1);
     expect(renders).not.toContain(undefined);
   });
 
-  it("returns a BehaviorSubject's value on the first render and rerenders on the next value", () => {
+  it("returns a BehaviorSubject's value on the first render, so no empty frame renders before it", () => {
     const subject$ = new BehaviorSubject(1);
-    const renders: number[] = [];
 
-    const { result } = renderHook(() => {
-      const value = useSubscription(subject$);
-      renders.push(value as number);
-      return value;
-    });
+    const { renders } = renderRecordingHook(subject$);
 
     expect(renders[0]).toBe(1);
+    expect(renders).not.toContain(undefined);
+  });
+
+  it("rerenders with a BehaviorSubject's next value", () => {
+    const subject$ = new BehaviorSubject(1);
+    const { result } = renderHook(() => useSubscription(subject$));
 
     act(() => subject$.next(2));
 
@@ -82,27 +94,35 @@ describe('useSubscription', () => {
     }
   });
 
-  it('follows a changed observable and closes the subscription to the old one', () => {
-    const first$ = new BehaviorSubject('first');
+  it('returns the value of a changed observable, so a component never shows a previous stream', () => {
     const second$ = new BehaviorSubject('second');
-    const { result, rerender } = renderHook(({ observable }) => useSubscription(observable), {
-      initialProps: { observable: first$ },
-    });
-
-    expect(result.current).toBe('first');
+    const { result, rerender } = renderWithObservable(new BehaviorSubject('first'));
 
     rerender({ observable: second$ });
 
     expect(result.current).toBe('second');
+  });
+
+  it('closes the subscription to the old observable when the observable changes, so it is not held open', () => {
+    const first$ = new BehaviorSubject('first');
+    const { rerender } = renderWithObservable(first$);
+
+    rerender({ observable: new BehaviorSubject('second') });
+
     expect(first$.observed).toBe(false);
-    expect(second$.observed).toBe(true);
+  });
+
+  it('ignores values the old observable emits after the observable changed', () => {
+    const first$ = new BehaviorSubject('first');
+    const { result, rerender } = renderWithObservable(first$);
+    rerender({ observable: new BehaviorSubject('second') });
 
     act(() => first$.next('stale'));
 
     expect(result.current).toBe('second');
   });
 
-  it('closes the subscription to a replaying observable on unmount', () => {
+  it('unsubscribes from a replaying observable on unmount, although the first render already read its value', () => {
     const subject$ = new ReplaySubject<number>(1);
     subject$.next(1);
     const { unmount } = renderHook(() => useSubscription(subject$));

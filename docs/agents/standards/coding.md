@@ -13,21 +13,22 @@ says *where* code lives, this one says *how* it reads.
    `extends` allowed is a custom error on `Error`.
 
 This package is hooks and a small RxJS/tsyringe event system: today its behaviour is two hooks, a
-handler contract, a shared `Subject`, and one class decorator. **Classes are for state with
-invariants to protect, or a class a consumer decorates and registers with `tsyringe`** — not a
-default wrapper around a function.
+handler contract, a shared `Subject`, one class decorator, and one RxJS operator. **Classes are for
+state with invariants to protect, or a class a consumer decorates and registers with `tsyringe`** —
+not a default wrapper around a function.
 
 ## Linting and formatting
 
-ESLint (`.eslintrc`) plus Prettier through `eslint-plugin-prettier`.
+[Biome](https://biomejs.dev) (`biome.json`) lints and formats in one pass: spaces, 120-column lines,
+single quotes, imports organised.
 
 ```bash
-npm run lint      # eslint . --ext .ts,.tsx — the gate; the pre-commit hook runs it
+npm run lint                # biome check . — the gate; the pre-commit hook runs it
+npx biome check --write .   # apply the safe fixes and formatting
 ```
 
-`no-console` is an **error**: a library never writes to a consumer's console. Type-aware rules
-(`no-unsafe-*`, `no-floating-promises`, `no-misused-promises`, `restrict-template-expressions`,
-`unbound-method`, …) are scoped to `src/**/*.{ts,tsx}` via the type-checked override.
+`noConsole` is an **error**: a library never writes to a consumer's console. The `types` domain is
+on, so the type-aware rules (`noFloatingPromises`, `noMisusedPromises`, …) see the real types.
 
 ## Interfaces and types
 
@@ -38,15 +39,16 @@ npm run lint      # eslint . --ext .ts,.tsx — the gate; the pre-commit hook ru
   `Event<P>`. Reach for `interface` when there is nothing generic or conditional about the shape.
 - **Consumers own boundary interfaces** — a consumer declares the interface for what it needs and
   uses only that; this package does not grow interfaces speculatively for hypothetical consumers.
-- **One export per file**, named after it. **No barrels** except `src/index.ts`.
+- **One export per file**, named after it. **No barrels** except the entry points — `src/index.ts`
+  and each category's `index.ts` (see the [architecture standard](./architecture.md#two-rules)).
 - **Interfaces and type aliases live in their own files**, named after them (`TEvent.ts`,
   `IEventHandler.ts`), except where two are small and inseparable (`TEvent.ts` also holds `IEvent`,
   which `TEvent` is defined in terms of).
 - **Typing is explicit and enforced** — no implicit `any`; public APIs are annotated. An index read
   on an array or record is `T | undefined` and must be narrowed.
 - **Avoid `any` and `unknown`** — use a precise type. `unknown` only at a genuine untrusted
-  boundary, narrowed immediately. `@typescript-eslint/no-explicit-any` is an error.
-- **A type-only import says `import type`** — `@typescript-eslint/consistent-type-imports` is an
+  boundary, narrowed immediately. Biome's `noExplicitAny` is an error.
+- **A type-only import says `import type`** — Biome's `useImportType` is an
   error, and it matters here specifically: `reflect-metadata`'s side effects must run before a
   decorated class is evaluated, so a value import that should have been `import type` can
   reorder emitted output in a way that breaks decorator metadata.
@@ -83,7 +85,7 @@ Names replace comments.
 - Errors are typed classes on `Error`.
 - **Validate untrusted input at the boundary**; trust types inside.
 - **Never swallow** — catch only to handle or rethrow with context.
-- **This library never writes to the console** (`no-console`); a hook or handler either does its
+- **This library never writes to the console** (`noConsole`); a hook or handler either does its
   job or throws.
 
 ## Asynchrony
@@ -118,7 +120,7 @@ docs cannot recover goes with it, keep it. Otherwise it was a second copy of som
 written down, and a second copy drifts.
 
 - **Load-bearing means evidence** — the reason `reflect-metadata` is imported first in
-  `src/index.ts` and nowhere else, the `@ts-expect-error` note in `EventHandlerAnnotation.ts`
+  `src/Event/index.ts` and nowhere else, the `@ts-expect-error` note in `EventHandlerAnnotation.ts`
   explaining exactly what is unsound and why. Facts nobody reading the code could derive.
 - **Cite the standard, never restate it.** A rule that lives in `docs/agents/standards/` is named
   by file and section in one line, not re-explained in prose that will diverge from it.
@@ -142,7 +144,8 @@ budget means the material must be reduced.
 - **Group by feature, not by kind** — `Event/` owns every module the event system needs; no
   `interfaces/`, `types/`, or `services/` bucket folders.
 - **Tests are colocated** with the module they cover, not in a parallel tree.
-- **Imports are non-relative from `src`** — see the [architecture standard](./architecture.md).
+- **Type-only imports may be non-relative from `src`; value imports are relative** — Rollup does not
+  resolve the `tsconfig` paths. See the [architecture standard](./architecture.md#imports-type-only-may-be-non-relative-values-are-relative).
 
 ## React
 

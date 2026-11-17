@@ -147,6 +147,8 @@ budget means the material must be reduced.
 
 - **Hooks only, declared as `const`.** This package ships no components; every public surface that
   touches React is a hook.
-- **A hook does the minimum React requires** — `useAction` and `useSubscription` each wrap exactly
-  one `useEffect`/cleanup pair around one RxJS primitive. New behaviour is a new hook, not more
-  responsibility piled onto an existing one.
+- **A hook does the minimum React requires** — `useAction` wraps exactly one `useEffect`/cleanup
+  pair around one RxJS primitive; `useSubscription` bridges one `Observable` through
+  `useSyncExternalStore`, which reads a replayed value in the first render and does not tear under
+  concurrent rendering (#12). New behaviour is a new hook, not more responsibility piled onto an
+  existing one.

@@ -108,6 +108,24 @@ const CounterValue: FunctionComponent<IProps> = ({ counter$ }) => {
 };
 ```
 
+`useSubscription` returns the value the observable emits synchronously on subscribe in the **first** render. A `ReplaySubject` that
+holds a value, a `BehaviorSubject` or `of(x)` therefore never renders `undefined` first. An observable that emits nothing on subscribe
+(a plain `Subject`, a delayed source) returns `undefined` until its first emission. To read that synchronous value during render, the
+hook subscribes once and closes that subscription at once, so a cold observable with side effects runs one extra time per observable.
+
+When the component gets a different observable, the hook unsubscribes from the old one and follows the new one. Keep the observable's
+identity stable between renders: an observable created inline during render is a new instance each time, so the hook subscribes again on
+every render. Create it with `useMemo` or `useRef`, or pass it in from outside the component.
+
+```tsx
+const DoubledValue: FunctionComponent<IProps> = ({ counter$ }) => {
+  const doubled$ = useMemo(() => counter$.pipe(map((value) => value * 2)), [counter$]);
+  const doubled = useSubscription(doubled$);
+
+  return <div>{doubled}</div>;
+};
+```
+
 ### Share a stream and replay it to late subscribers
 
 `shareWhileSubscribers` multicasts a source and replays its latest value(s) to a subscriber that

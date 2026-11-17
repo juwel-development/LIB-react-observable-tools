@@ -1,3 +1,26 @@
+# [3.0.0](https://github.com/juwel-development/LIB-react-observable-tools/compare/v2.2.1...v3.0.0) (2026-11-17)
+
+
+* feat(hooks)!: always call the latest committed handler from useAction ([#11](https://github.com/juwel-development/LIB-react-observable-tools/issues/11)) ([446f776](https://github.com/juwel-development/LIB-react-observable-tools/commit/446f7767bb21f6b089670773e6d4becee5342639))
+
+
+### Bug Fixes
+
+* **hooks:** avoid the React 18 SSR layout-effect warning in useAction ([#11](https://github.com/juwel-development/LIB-react-observable-tools/issues/11)) ([710a8b8](https://github.com/juwel-development/LIB-react-observable-tools/commit/710a8b87e232b27086bf984e31f72de8c2760159))
+
+
+### Features
+
+* **hooks:** render the replayed value at once and follow a changed observable ([#12](https://github.com/juwel-development/LIB-react-observable-tools/issues/12)) ([f0effe5](https://github.com/juwel-development/LIB-react-observable-tools/commit/f0effe5e8af67769498447991bea6c33f5513266))
+
+
+### BREAKING CHANGES
+
+* useAction no longer accepts a `dependencies` argument;
+passing one is a type error. Drop the second argument at every call
+site, and delete any Biome `useExhaustiveDependencies` entry configured
+for `useAction`.
+
 ## [2.2.1](https://github.com/juwel-development/LIB-react-observable-tools/compare/v2.2.0...v2.2.1) (2026-08-13)
 
 

@@ -72,7 +72,7 @@ Names replace comments.
 | Observable / Subject | `camelCase` or `PascalCase` per its binding, suffixed `$` | `GlobalEvent$`, `onClick$` |
 | DI token | `PascalCase`, suffixed `Token` | `GlobalEventStreamToken` |
 | Global constant | `SCREAMING_SNAKE_CASE` | — |
-| Local constant | `camelCase` | `subjectRef` |
+| Local constant | `camelCase` | `handlerRef` |
 | File | matches its hook, class, interface, or type alias | `useAction.ts`, `IEventHandler.ts` |
 | Test | the module plus `.spec` | `useAction.spec.ts` |
 
@@ -98,9 +98,10 @@ exist to bridge that world into React's render cycle, not to replace it with one
   callback into them.
 - **A hook that surfaces a stream's value never re-emits into it** — `useSubscription` only reads;
   it does not `.next()` on the `Observable` it was handed.
-- Ownership of a `Subject`'s lifetime is the caller's: `useAction` creates and tears down its own
-  (via `useRef` + the `useEffect` cleanup), and `GlobalEvent$` is process-lifetime by design — it
-  is registered once in the `tsyringe` container and never completed.
+- Ownership of a `Subject`'s lifetime is the caller's: `useAction` creates its own once (lazy
+  `useState`) and unsubscribes its handler in the `useEffect` cleanup without completing it, and
+  `GlobalEvent$` is process-lifetime by design — it is registered once in the `tsyringe` container
+  and never completed.
 - One-shot I/O may `await` internally but is exposed as an `Observable` or `Subject` across a
   public boundary.
 
@@ -148,7 +149,7 @@ budget means the material must be reduced.
 - **Hooks only, declared as `const`.** This package ships no components; every public surface that
   touches React is a hook.
 - **A hook does the minimum React requires** — `useAction` wraps exactly one `useEffect`/cleanup
-  pair around one RxJS primitive; `useSubscription` bridges one `Observable` through
-  `useSyncExternalStore`, which reads a replayed value in the first render and does not tear under
-  concurrent rendering (#12). New behaviour is a new hook, not more responsibility piled onto an
-  existing one.
+  pair around one RxJS primitive (plus only the layout effect that keeps its handler ref on the
+  latest commit); `useSubscription` bridges one `Observable` through `useSyncExternalStore`, which
+  reads a replayed value in the first render and does not tear under concurrent rendering (#12).
+  New behaviour is a new hook, not more responsibility piled onto an existing one.
